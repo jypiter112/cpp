@@ -5,18 +5,20 @@
 #include <cstring>
 #include <optional>
 using std::cout, std::hash, std::list, std::pair, std::string, std::vector;
+
 /*
-	This whole project was for understanding how hashmaps work and
-	working with cpp templates and optionals.
+	Project: learn hashmaps more deeply
+		- Seperate chaining
+		- Linear probing collsiion dealing
 
-	Seperate chaining some functiosn marked as virtual, because at first I thought of using class heritance in 
-	the opena addressing hashtable, but soon realised that doesnt that isnt useful at all in this case.
+	C++17 langauge learning
+		- templates
+		- virtual and override -> class heritance (wasnt actually used afterall)
 */
-
 
 /*
 https://en.cppreference.com/w/cpp/utility/unreachable.html
-Some compiler opitmization I wanted to try. Im not sure if this even works.
+Soon realised this wasnt needed...
 */
 [[noreturn]] inline void _unreachable_() {
 #if defined(_MSC_VER) && !defined(__clang__) // MSVC
@@ -184,7 +186,7 @@ namespace HT {
 			*/
 			// start one index forward
 			int start = hash;
-			while (true) {
+			while (hash != start) {
 				Cell* c = &table[hash];
 
 				// update existing value
@@ -203,10 +205,7 @@ namespace HT {
 				}
 				// wrap around
 				hash = (hash + 1) % table.size(); // not sure if table.size() is good here or not?
-				if (hash == start) {
-					throw std::overflow_error("Hash table overflow");
-				}
-			}
+			} throw std::overflow_error("Hash table overflow");
 		}
 		bool removeItem(int key) {
 			if (table.empty())
@@ -217,7 +216,7 @@ namespace HT {
 
 			// linear probing
 			int start = hash;
-			while (true) {
+			while (hash != start) {
 				Cell* c = &table[hash];
 				// empty slot so no key found
 				if (!c->occupied && !c->deleted) {
@@ -235,13 +234,7 @@ namespace HT {
 
 				// wrap around
 				hash = (hash + 1) % table.size(); // not sure if table.size() is good here or not?
-				if (hash == start) {
-					return false;
-				}
-			}
-			// std++23 std::unreachable, cpprefe impl:
-			_unreachable_();
-			return false;
+			} return false;
 		}
 		std::optional<value_> searchTable(int key) {
 			if (table.empty())
@@ -253,7 +246,7 @@ namespace HT {
 
 			// linear probing
 			int start = hash;
-			while (true) {
+			while (hash != start) {
 				Cell* c = &table[hash];
 
 				// existing value found
@@ -266,10 +259,7 @@ namespace HT {
 				}
 				// wrap around
 				hash = (hash + 1) % table.size(); // not sure if table.size() is good here or not?
-				if (hash == start) {
-					return std::nullopt;
-				}
-			}
+			} return std::nullopt;
 		}
 	};
 }
