@@ -23,6 +23,16 @@ namespace Algorithms {
         // no value
         return -1;
     }
+    /*
+        Time complexity: O(log n)
+
+        Modify accuracy with step and tolerance.
+        Tolerance is step - 1 decimal place.
+        Quarenteed accuracy is step - 1 decimal place.
+
+        Improvement ideas:
+        Could use a static table of known common square root values?
+    */
     double mysqrt(const double& num){
         if (num < 0) throw std::out_of_range("Complex numbers are not supported");
         double l = 0;
