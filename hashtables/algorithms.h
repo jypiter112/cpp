@@ -38,7 +38,7 @@ namespace Algorithms {
         double l = 0;
         const double step = 0.001;
         const double tolerance = 0.01;
-        double r = (double)num;
+        double r = num;
         // find the square root with binary search
         while (l <= r) {
             double mid = l + (r - l) / 2;
