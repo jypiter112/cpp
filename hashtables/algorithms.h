@@ -23,4 +23,26 @@ namespace Algorithms {
         // no value
         return -1;
     }
+    double mysqrt(const double& num){
+        if (num < 0) throw std::out_of_range("Complex numbers are not supported");
+        double l = 0;
+        const double step = 0.001;
+        const double tolerance = 0.01;
+        double r = (double)num;
+        // find the square root with binary search
+        while (l <= r) {
+            double mid = l + (r - l) / 2;
+            if ((mid * mid) < (num + tolerance) && (mid*mid) > (num - tolerance)) return mid;
+            if (mid*mid < num) {
+                l = mid + step;
+            }
+            else {
+                r = mid - step;
+            }
+        }
+        // exception
+        throw std::exception("Something went wrong");
+        // unreachable
+        return double(-1);
+    }
 }
